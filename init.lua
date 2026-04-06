@@ -654,8 +654,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         -- You can add other tools here that you want Mason to install
         'stylua', -- Used to format Lua code
-        'isort', -- Used to sort Python imports
-        'black', -- Used to format Python code
+        'ruff', -- Used to format and lint Python code
         -- 'astyle', -- Used to format C/C++ code
       })
 
@@ -701,7 +700,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'isort', 'black' },
+        python = { 'ruff_organize_imports', 'ruff_format' },
         -- cpp = { 'astyle' },
         -- c = { 'astyle' },
         --
