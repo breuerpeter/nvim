@@ -176,6 +176,18 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+vim.keymap.set('n', '<leader>cd', function()
+  local diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })
+  if #diagnostics == 0 then
+    vim.notify('No diagnostics on this line', vim.log.levels.WARN)
+    return
+  end
+  local messages = vim.tbl_map(function(d) return d.message end, diagnostics)
+  local text = table.concat(messages, '\n')
+  vim.fn.setreg('+', text)
+  vim.notify('Copied: ' .. text)
+end, { desc = '[C]opy [D]iagnostic message' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
