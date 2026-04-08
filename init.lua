@@ -894,6 +894,10 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
+      -- add nvim-treesitter's runtime dir to rtp so Neovim can find highlight queries
+      local ts_path = vim.fn.stdpath('data') .. '/lazy/nvim-treesitter'
+      vim.opt.rtp:prepend(ts_path .. '/runtime')
+
       -- ensure basic parser are installed
       local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
       require('nvim-treesitter').install(parsers)
