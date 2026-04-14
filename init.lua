@@ -396,6 +396,8 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local ignore_file = vim.fn.stdpath 'config' .. '/telescope-ignore'
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -406,8 +408,24 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          vimgrep_arguments = {
+            'rg', '--color=never', '--no-heading', '--with-filename',
+            '--line-number', '--column', '--smart-case',
+            '--hidden', '--ignore-file', ignore_file,
+          },
+        },
         extensions = {
           ['ui-select'] = { require('telescope.themes').get_dropdown() },
+        },
+        pickers = {
+          find_files = {
+            hidden = true,
+            find_command = {
+              'rg', '--files', '--color=never', '--hidden',
+              '--ignore-file', ignore_file,
+            },
+          },
         },
       }
 
