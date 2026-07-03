@@ -719,6 +719,12 @@ require('lazy').setup({
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { cpp = true, c = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
+          -- For C/C++, opt in per-project: format only when a .clang-format
+          -- exists up the tree (e.g. px4-rerun yes, PX4 no).
+          local filepath = vim.api.nvim_buf_get_name(bufnr)
+          if vim.fs.find('.clang-format', { path = filepath, upward = true })[1] then
+            return { timeout_ms = 2000, lsp_format = 'fallback' }
+          end
           return nil
         else
           return {
@@ -975,7 +981,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommended keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
